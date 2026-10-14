@@ -1,0 +1,336 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EFES — Returnable Holder System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--c:#ffffff;--ink:#121824;--m:#5a6878;--g:#2f7fe0;--g2:#e6f0fc;--ln:#e2e8f0;--nv:#0b2a47;--bad:#d64545;--wn:#e8912d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#ffffff;--c:#ffffff;--ink:#121824;--m:#5a6878;--g2:#e6f0fc;--ln:#e2e8f0}:root:not([data-theme="light"]) .col{background:var(--c)}}
+:root[data-theme="dark"]{--bg:#ffffff;--c:#ffffff;--ink:#121824;--m:#5a6878;--g2:#e6f0fc;--ln:#e2e8f0}
+:root[data-theme="dark"] .col{background:var(--c)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 12px/1.35 Inter,system-ui,sans-serif}
+.top-role-bar{background:var(--nv);color:#fff;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;box-shadow:0 2px 6px rgba(0,0,0,.15);margin-bottom:8px}
+.top-role-bar .title{font-weight:700;font-size:14px;letter-spacing:.03em}
+.role-buttons{display:flex;gap:6px;flex-wrap:wrap}
+.role-buttons button{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font:600 11px Inter;transition:background .2s}
+.role-buttons button.active{background:var(--g)}
+.role-buttons button:hover{background:rgba(255,255,255,.25)}
+.wrap{display:grid;grid-template-columns:1fr;gap:8px;padding:8px;max-width:900px;margin:auto}
+.col{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:10px;min-width:0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.hd{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.hd i{flex:none;width:38px;height:38px;border-radius:50%;background:var(--nv);color:#fff;font:700 20px/38px Inter;text-align:center}
+.hd b{display:block;font-size:19px;font-weight:600}.hd span{color:var(--m);font-size:11.5px}
+.card{background:var(--c);border:1px solid var(--ln);border-radius:9px;padding:9px;margin-bottom:8px}
+.card h4{margin:0 0 7px;font-size:12px;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+@media(max-width:560px){.g2{grid-template-columns:1fr}}
+.g2>.card,.g3>.card{margin:0}
+.adm{display:flex;gap:8px}.side{flex:none;width:92px;background:var(--nv);border-radius:10px;color:#fff;padding:10px 7px;display:flex;flex-direction:column;gap:3px}
+.side .lg{font:800 22px Inter;text-align:center;margin-bottom:10px}.side button{all:unset;cursor:pointer;padding:8px 7px;border-radius:7px;font-size:11px;display:block;transition:background .2s}
+.side button:hover{background:rgba(255,255,255,.1)}
+.side button.on{background:var(--g)}.side .u{margin-top:auto;font-size:10px;padding:6px}
+.adm>.mn{flex:1;min-width:0}
+@media(max-width:620px){.adm{flex-direction:column}.side{width:auto;flex-direction:row;flex-wrap:wrap}.side .lg,.side .u{display:none}}
+.kp{display:flex;gap:7px;align-items:center}.kp svg{flex:none}.kp small{display:block;color:var(--m);font-size:10.5px}.kp b{font-size:15px;font-weight:700}.up{color:var(--g);font-size:10px}.dn{color:var(--bad);font-size:10px}
+table{width:100%;border-collapse:collapse}td,th{padding:5px 3px;text-align:left;font-size:11px;border-bottom:1px solid var(--ln)}th{color:var(--m);font-weight:600}
+.tg{padding:1px 7px;border-radius:9px;font-size:10px;font-weight:600;background:var(--g2);color:var(--g)}.tg.r{background:#fbe6c8;color:#a35b0b}.tg.x{background:#fbe0e0;color:#a32b2b}
+.btn{display:block;width:100%;border:0;border-radius:6px;background:var(--g);color:#fff;font:600 11.5px Inter;padding:8px;margin-top:6px;cursor:pointer;text-align:center}
+.btn.o{background:var(--g2);color:var(--g)}.btn:disabled{opacity:.45;cursor:not-allowed}.btn.b{background:#2f7fe0}
+button:focus-visible,input:focus-visible{outline:2px solid var(--wn);outline-offset:2px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--ln);font-size:11px}.row:last-child{border:0}
+.row .l{display:flex;gap:6px;align-items:center}.dot{width:8px;height:8px;border-radius:50%;background:var(--g);display:inline-block}
+.map{width:100%;height:auto;display:block;border-radius:7px;background:#f4f8fd}
+.ph{background:var(--nv);border-radius:16px;padding:5px;color:var(--ink)}.ph>div{background:var(--c);border-radius:12px;padding:8px;height:100%;text-align:center;min-height:208px}
+.ph .t{display:flex;justify-content:space-between;font:800 10px Inter;color:var(--g);margin-bottom:6px}
+.ph h5{margin:0 0 5px;font-size:11px}.ph p{margin:3px 0;font-size:10px;color:var(--m)}
+.ring{--p:75;width:78px;height:78px;border-radius:50%;background:conic-gradient(var(--g) calc(var(--p)*1%),var(--g2) 0);display:grid;place-items:center;margin:auto}
+.ring div{width:60px;height:60px;border-radius:50%;background:var(--c);display:grid;place-items:center;font:700 16px Inter;line-height:1;text-align:center}
+.ring small{display:block;font-size:9px;color:var(--m);font-weight:500}
+.ring.big{width:116px;height:116px}.ring.big div{width:90px;height:90px;font-size:30px}
+input{width:100%;padding:7px;border:1px solid var(--ln);border-radius:6px;background:var(--bg);color:var(--ink);font:500 11px Inter;margin-bottom:4px}
+.hero{border-radius:10px;min-height:130px;background:linear-gradient(135deg,#0b2a47,#1f4e78 55%,#3b7bc4);position:relative;overflow:hidden;color:#fff;padding:12px;display:flex;align-items:flex-end}
+.hero .bx{position:absolute;left:14px;top:14px;width:150px;height:100px;background:#184a75;border-radius:6px;border:3px solid #0f3556;display:grid;place-items:center;font:800 18px Inter;letter-spacing:.05em}
+.hero b{position:relative;margin-left:auto;font-size:15px;max-width:150px;text-align:right}
+.mini{width:100%;display:flex;gap:4px;align-items:flex-end;height:78px}.mini i{flex:1;background:var(--g);border-radius:2px 2px 0 0}
+.al{padding:6px;border-radius:7px;background:#fdeaea;color:#8c2323;font-weight:600;margin-top:5px;font-size:11px}
+.pf{width:26px;height:26px;border-radius:50%;background:var(--nv);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}.chips button{border:0;cursor:pointer;margin:0}
+.sc{overflow-x:auto}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--nv);color:#fff;padding:10px 16px;border-radius:9px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s;z-index:9}#toast.on{opacity:1}
+.rs{text-align:center;font-size:11px;margin-bottom:15px}.rs button{background:none;border:0;color:var(--g);cursor:pointer;font:600 11px Inter;text-decoration:underline;margin:5px}
+.auth-footer{text-align:center;font-size:11px;color:var(--m);margin-bottom:25px;padding-top:4px}
+.auth-footer button{background:none;border:0;color:var(--g);cursor:pointer;font:600 11px Inter;text-decoration:underline;padding:0 4px}
+</style></head><body>
+
+<div class="top-role-bar">
+  <div class="title">EFES — Returnable Holder System</div>
+  <div class="role-buttons">
+    <button onclick="setRole('admin')" id="btn-role-admin" class="active">Admin</button>
+    <button onclick="setRole('point')" id="btn-role-point">Point</button>
+    <button onclick="setRole('dist')" id="btn-role-dist">Distributor</button>
+    <button onclick="setRole('user')" id="btn-role-user">User</button>
+  </div>
+</div>
+
+<div class="wrap" id="app"></div>
+
+<div class="rs">
+  <button onclick="init();R();T('Data reset')">Reset demo data</button>
+</div>
+
+<div class="auth-footer">
+  <span>Войти в аккаунт:</span>
+  <button onclick="T('Открытие формы авторизации (Log in)'); setRole('user');">Log in</button>
+  <span>|</span>
+  <button onclick="T('Открытие формы регистрации (Sign up)'); setRole('user');">Sign up</button>
+</div>
+
+<div id="toast" role="status"></div>
+<script>
+let S, V = "Dashboard", currentRole = "admin";
+const KS = ["Empty", "Washing", "Full", "In transit"];
+const HS = ["Active", "Returned", "Lost"];
+const PS = ["Warehouse", "In transit", "At distributor"];
+const CL = { Holder: "#2f7fe0", Keg: "#e8912d", Pallet: "#2f9e5a", Point: "#8a5cd6" };
+
+const MP = [
+  [75, 155, "Holder", "Aktau hub"],
+  [145, 125, "Holder", "Shymkent hub"],
+  [175, 105, "Point", "Store 8 (Taraz)"],
+  [220, 85, "Pallet", "Almaty WH"],
+  [210, 65, "Holder", "Almaty hub"],
+  [255, 95, "Point", "Green Market (Krg)"],
+  [265, 80, "Holder", "Karaganda DC"],
+  [290, 45, "Keg", "Astana plant"],
+  [330, 90, "Pallet", "Oskemen DC"],
+  [150, 40, "Point", "Kostanay Market"]
+];
+
+function init(){
+  S = {
+    hold: 1248000, rate: 92, co2: 12480, coins: 250, reuse: 3, step: 0, hid: "", fill: 75, tin: 48, tout: 46, cd: 230, pend: 8, insp: 12, reqs: 5, low: 1, over: 1, signed: 1, conf: 0, wh: 0,
+    rec: [["Return holder", "28.07.2026", 50], ["Invite a friend", "25.07.2026", 100], ["Purchase", "18.07.2026", 20]],
+    pick: [["Bar & Restaurant", "12:00", 0], ["Store 8", "14:30", 0], ["Kegs", "16:00", 0], ["Bar & Restaurant 0", "18:30", 0]],
+    dist: [["Almaty", 240000, 12000, 0], ["Astana", 200000, 8500, 0], ["Karaganda", 180000, 7800, 1], ["Shymkent", 160000, 2400, 0], ["Aktau", 120000, 1800, 0]],
+    inv: [1248000, 48000, 12500], bars: [50, 64, 72, 80, 88, 96, 100], route: 0, batch: 0,
+    kegs: [["K-1001", "Almaty plant", 2], ["K-1002", "Astana", 0], ["K-1003", "Karaganda", 3], ["K-1004", "Shymkent", 1], ["K-1005", "Aktau", 2], ["K-1006", "Almaty plant", 0]],
+    hl: [["EH-458732", "Aliyum K.", 0], ["EH-458733", "Bar Alma", 0], ["EH-458734", "Store 8", 0], ["EH-458735", "Marat S.", 1], ["EH-458736", "Green Market", 0], ["EH-458737", "Dana T.", 2]],
+    pl: [["P-2001", "Almaty", 0], ["P-2002", "Astana", 1], ["P-2003", "Karaganda", 2], ["P-2004", "Shymkent", 0], ["P-2005", "Aktau", 1]],
+    rcq: 340, rcd: 0, rep: [], flt: "all", sel: -1, q: "", tgt: 90, notif: 1
+  };
+}
+init();
+
+const f = n => n.toLocaleString("ru").replace(/\u00a0/g, " ");
+function T(m){const t = document.getElementById("toast"); t.textContent = m; t.classList.add("on"); clearTimeout(T.x); T.x = setTimeout(() => t.classList.remove("on"), 2200);}
+const hh = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f7fe0" stroke-width="1.8"><rect x="7" y="8" width="10" height="13" rx="2"/><path d="M10 8V4h4v4"/></svg>';
+
+function qr(s, z = 5){
+  let h = 0; for(const c of s) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  let r = "";
+  for(let y = 0; y < 21; y++) {
+    for(let x = 0; x < 21; x++){
+      const fd = (x < 7 && y < 7) || (x > 13 && y < 7) || (x < 7 && y > 13);
+      let on;
+      if(fd){
+        const a = x % 14, b = y % 14;
+        on = a == 0 || a == 6 || b == 0 || b == 6 || (a > 1 && a < 5 && b > 1 && b < 5);
+      } else {
+        h = (h * 1103515245 + 12345) >>> 0;
+        on = (h >>> 16) & 1;
+      }
+      if(on) r += `<rect x="${x*z}" y="${y*z}" width="${z}" height="${z}"/>`;
+    }
+  }
+  return `<svg width="${21*z}" height="${21*z}" viewBox="0 0 ${21*z} ${21*z}" fill="#121824" role="img" aria-label="QR code">${r}</svg>`;
+}
+
+function map(n = 10){
+  const pts = MP.slice(0, n).map((q, i) => 
+    (S.flt == "all" || S.flt == q[2]) ? `<circle cx="${q[0]}" cy="${q[1]}" r="${i==S.sel?8:5}" fill="${CL[q[2]]}" stroke="#fff" stroke-width="${i==S.sel?3:1}" style="cursor:pointer" onclick="S.sel=${i};R()"/>` : ""
+  ).join("");
+  const routes = `<path d="M290 45 L265 80 L220 85 L145 125 L75 155 M220 85 L150 40 M265 80 L330 90" stroke="#cbd5e1" fill="none" stroke-width="2" stroke-dasharray="4"/>`;
+  return `<svg class="map" viewBox="0 0 420 200">
+    <path d="M45,100 Q60,70 90,65 Q130,55 160,35 Q210,25 260,30 Q310,35 340,55 Q380,60 395,95 Q405,120 380,140 Q330,165 280,175 Q200,185 140,165 Q80,150 50,130 Z" fill="rgba(47, 127, 224, 0.06)" stroke="#2f7fe0" stroke-width="2"/>
+    ${routes}
+    ${pts}
+  </svg>`;
+}
+
+function updateHash(){
+  if(currentRole === 'admin') {
+    window.location.hash = `#${currentRole}/${V}`;
+  } else {
+    window.location.hash = `#${currentRole}`;
+  }
+}
+
+function nm(n){
+  V = n;
+  updateHash();
+  R();
+  T("Раздел: " + n);
+}
+
+function setRole(role){
+  currentRole = role;
+  if(role === 'admin' && !V) V = "Dashboard";
+  updateHash();
+  document.querySelectorAll('.role-buttons button').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('btn-role-' + role);
+  if(btn) btn.classList.add('active');
+  R();
+}
+
+function parseHash(){
+  const h = window.location.hash.replace('#', '');
+  if(!h) return;
+  const parts = h.split('/');
+  const role = parts[0];
+  if(['admin', 'point', 'dist', 'user'].includes(role)){
+    currentRole = role;
+    if(parts[1] && role === 'admin') {
+      V = parts[1];
+    }
+    document.querySelectorAll('.role-buttons button').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('btn-role-' + role);
+    if(btn) btn.classList.add('active');
+  }
+}
+
+window.addEventListener('hashchange', () => {
+  parseHash();
+  R();
+});
+
+const tb = (h, r) => `<div class="sc"><table><tr>${h.map(x => `<th>${x}</th>`).join("")}</tr>${r.join("")}</table></div>`;
+const kpi = (a) => `<div class="g3" style="margin-bottom:8px">${a.map(x => `<div class="card"><small style="color:var(--m)">${x[0]}</small><div style="font-size:17px;font-weight:700">${x[1]}</div></div>`).join("")}</div>`;
+const sb = (s, i, c) => `<span class="tg ${c}">${s}</span>`;
+
+function vKeg(){
+  const c = i => S.kegs.filter(k => k[2] == i).length;
+  return kpi([["Total kegs", f(S.inv[1] + S.kegs.length)], ["Full", c(2)], ["Empty / washing", c(0) + c(1)]]) + 
+    `<div class="card"><h4 style="font-size:14px">Kegs</h4>${tb(["ID", "Location", "Status", ""], S.kegs.map((k, i) => `<tr><td>${k[0]}</td><td>${k[1]}</td><td>${sb(KS[k[2]], 0, k[2]==0?"r":"")}</td><td><button class="tg" style="border:0;cursor:pointer" onclick="kc(${i})">Next ›</button></td></tr>`))}<button class="btn" onclick="S.kegs.push(['K-'+(1007+S.kegs.length-6),'Almaty plant',0]);S.inv[1]++;T('Keg added');R()">+ Register keg</button></div>`;
+}
+function vHol(){
+  const q = S.q.toLowerCase(), L = S.hl.map((h, i) => [h, i]).filter(x => (x[0][0] + x[0][1]).toLowerCase().includes(q));
+  return kpi([["Total holders", f(S.hold)], ["Return rate", S.rate + "%"], ["Lost (list)", S.hl.filter(h => h[2] == 2).length]]) + 
+    `<div class="card"><h4 style="font-size:14px">Holders</h4><input id="hq" placeholder="Search ID or name" value="${S.q}" oninput="hs(this.value)">${tb(["ID", "Owner", "Status", ""], L.map(x => `<tr><td>${x[0][0]}</td><td>${x[0][1]}</td><td>${sb(HS[x[0][2]], 0, x[0][2]==2?"x":x[0][2]?"r":"")}</td><td><button class="tg" style="border:0;cursor:pointer" onclick="hc(${x[1]})">Next ›</button></td></tr>`))}${L.length ? "" : '<p style="color:var(--m)">Nothing found</p>'}</div>`;
+}
+function vPal(){
+  return kpi([["Total pallets", f(S.inv[2])], ["In transit", S.pl.filter(p => p[2] == 1).length], ["At distributors", S.pl.filter(p => p[2] == 2).length]]) + 
+    `<div class="card"><h4 style="font-size:14px">Pallets</h4>${tb(["ID", "Destination", "Status", ""], S.pl.map((p, i) => `<tr><td>${p[0]}</td><td>${p[1]}</td><td>${sb(PS[p[2]], 0, p[2]==1?"r":"")}</td><td><button class="tg" style="border:0;cursor:pointer" onclick="pa(${i})">Advance ›</button></td></tr>`))}</div>`;
+}
+function vRec(){
+  return kpi([["Awaiting recycling", f(S.rcq)], ["Recycled", f(S.rcd)], ["CO₂ saved", f(S.co2) + " kg"]]) + 
+    `<div class="card"><h4 style="font-size:14px">Recycling</h4><p style="color:var(--m)">End-of-life holders and kegs collected for processing at the plant.</p><button class="btn" ${S.rcq ? "" : "disabled"} onclick="S.rcd+=S.rcq;S.co2+=S.rcq*3;S.hold-=Math.round(S.rcq/10);T('Batch sent: '+S.rcq+' items');S.rcq=0;R()">Send batch to recycling</button></div>`;
+}
+function vRep(){
+  return `<div class="card"><h4 style="font-size:14px">Reports</h4><div class="g3">${["Daily", "Weekly", "Monthly"].map(t => `<button class="btn o" style="margin:0" onclick="gen('${t}')">${t}</button>`).join("")}</div></div><div class="card"><h4>Generated</h4>${S.rep.length ? tb(["Type", "Created", "Holders", "Return"], S.rep.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${f(r[2])}</td><td>${r[3]}%</td></tr>`)) : '<p style="color:var(--m)">No reports yet</p>'}</div>`;
+}
+function vSet(){
+  return `<div class="card"><h4 style="font-size:14px">Settings</h4><div class="row"><span>Return rate target, %</span><input type="number" min="50" max="100" value="${S.tgt}" style="width:70px;margin:0" onchange="S.tgt=+this.value;T('Target: '+S.tgt+'%');R()"></div>
+ <div class="row"><span>Notifications</span><button class="tg ${S.notif ? "" : "r"}" style="border:0;cursor:pointer" onclick="S.notif^=1;T('Notifications '+(S.notif?'on':'off'));R()">${S.notif ? "On" : "Off"}</button></div>
+ <p style="color:${S.rate >= S.tgt ? "var(--g)" : "var(--bad)"}">Current ${S.rate}% ${S.rate >= S.tgt ? "meets" : "is below"} the target</p></div>`;
+}
+function vw(){ return ({Keg: vKeg, Holders: vHol, Pallets: vPal, Recycling: vRec, Reports: vRep, Settings: vSet})[V](); }
+function kc(i){ S.kegs[i][2] = (S.kegs[i][2] + 1) % 4; T(S.kegs[i][0] + ": " + KS[S.kegs[i][2]]); R(); }
+function hc(i){ S.hl[i][2] = (S.hl[i][2] + 1) % 3; T(S.hl[i][0] + ": " + HS[S.hl[i][2]]); R(); }
+function pa(i){ S.pl[i][2] = (S.pl[i][2] + 1) % 3; T(S.pl[i][0] + ": " + PS[S.pl[i][2]]); R(); }
+function hs(v){ S.q = v; R(); const e = document.getElementById("hq"); if(e){ e.focus(); e.setSelectionRange(v.length, v.length); } }
+function gen(t){ S.rep.unshift([t, new Date().toLocaleString("ru"), S.hold, S.rate]); T(t + " report generated"); R(); }
+
+function admin(){
+  const ret = S.rate;
+  return `<section class="col" id="section-admin"><div class="hd"><i>1</i><div><b>EFES ADMIN</b><span>Full control. Real-time visibility. Smarter decisions.</span></div></div>
+<div class="adm"><div class="side"><div class="lg">EFES</div>${["Dashboard", "Keg", "Holders", "Pallets", "Recycling", "Reports", "Settings"].map(x => `<button class="${V==x?"on":""}" onclick="nm('${x}')">${x}</button>`).join("")}<div class="u">Admin<br>EFES</div></div>
+<div class="mn">${V=="Dashboard"?`<div class="card"><h4 style="font-size:14px;display:flex;justify-content:space-between">Overview <span style="font-weight:500;color:var(--m);font-size:11px">01.08.2026 – 30.08.2026</span></h4>
+<div class="g3"><div class="kp">${hh}<div><small>Total Holders</small><b>${f(S.hold)}</b><div class="up">↑ +12%</div></div></div><div class="kp"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f7fe0" stroke-width="2"><path d="M20 12a8 8 0 1 1-3-6"/><path d="M20 3v5h-5"/></svg><div><small>Return Rate</small><b>${ret}%</b><div class="dn">↓ -5%</div></div></div><div class="kp"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2f7fe0" stroke-width="1.8"><path d="M5 19C5 10 11 5 20 4c0 9-5 15-15 15z"/></svg><div><small>Saved CO₂</small><b>${f(S.co2)} kg</b><div class="up">↑ +18%</div></div></div></div></div>
+<div class="g2"><div class="card"><h4>Quick asset inventory</h4>${[["Holders", "Holders"], ["Pallets", "Pallets"], ["Kegs", "Keg"]].map((n, i) => `<div class="row"><span class="l">${hh.replace(/26/g,"18")}${n[0]}</span><b style="cursor:pointer" onclick="nm('${n[1]}')">${f(S.inv[i])} ›</b></div>`).join("")}</div>
+<div class="card"><h4>Return & collection</h4><div class="row"><span>Pending approvals</span><b>${S.pend}</b></div><div class="row"><span>Inspection today</span><b>${S.insp}</b></div><div class="row"><span>Collection requests</span><b>${S.reqs}</b></div><button class="btn" ${S.pend+S.reqs?"":"disabled"} onclick="S.pend=0;S.reqs=0;S.dist[2][3]=0;S.low=0;T('Approved & scheduled');R()">Approve & schedule</button></div></div>
+<div class="g2" style="margin-top:8px"><div class="card"><h4>Distributors balance</h4><table><tr><th>Distributor</th><th>Holders</th><th>Pallets</th><th>Status</th></tr>${S.dist.map(d => `<tr><td>${d[0]}</td><td>${f(d[1])}</td><td>${f(d[2])}</td><td><span class="tg ${d[3]?"r":""}">${d[3]?"At risk":"On track"}</span></td></tr>`).join("")}</table></div>
+<div class="card"><h4>Alerts</h4>${S.low?'<div class="row"><span class="l"><span class="dot" style="background:var(--bad)"></span>Karaganda – delayed return</span><span style="color:var(--m)">2h ago</span></div><div class="row"><span class="l"><span class="dot" style="background:var(--wn)"></span>Low balance – Shymkent</span><span style="color:var(--m)">4h ago</span></div>':""}<div class="row"><span class="l"><span class="dot" style="background:#2f7fe0"></span>Inspection due – ${S.insp>3?3:S.insp} points</span><span style="color:var(--m)">6h ago</span></div>${S.low?"":'<p style="color:var(--g);margin:6px 0 0">All delays resolved ✓</p>'}</div></div>
+<div class="g2" style="margin-top:8px"><div class="card"><h4>Analytics · Return rate trend</h4><div style="font-size:18px;font-weight:700">${ret}% <span class="up">+5%</span></div><div class="mini">${S.bars.map(b => `<i style="height:${b*.78}%"></i>`).join("")}</div></div></div>`:vw()}</div></div></section>`;
+}
+
+function point(){
+  const st = S.step;
+  const ph1 = `<div class="ph"><div><div class="t">EFES<span>⌕</span></div><h5>Receive holder</h5>${qr("A23-0145", 4)}<p>Scan QR code from the holder</p><input id="hid" placeholder="Holder ID" value="${S.hid}" style="font-size:10px"><button class="btn" onclick="sc()">Scan QR</button></div></div>`;
+  const ph2 = `<div class="ph"><div><div class="t">EFES<span>⌕</span></div><h5>Asset verification</h5>${st>=1?`<div style="width:44px;height:44px;border-radius:50%;background:var(--g);color:#fff;font-size:24px;line-height:44px;margin:6px auto">✓</div><b style="font-size:11px">Holder #${S.hid}</b><p>Valid asset ID</p><p>Batch: A23-0145</p><button class="btn" ${st>=2?"disabled":""} onclick="acc()">${st>=2?"Accepted":"Accept return"}</button>`:`<p style="margin-top:50px">Waiting for scan…</p>`}</div></div>`;
+  const ph3 = `<div class="ph"><div><div class="t">EFES<span>⌕</span></div><h5>Customer reward</h5><div style="font-size:32px">🎁</div><b style="color:var(--g);font-size:16px">${st>=2?"+50":"+0"} coins</b><p>Added to your account</p><button class="btn" onclick="setRole('user');T('Switched to consumer view')">View rewards</button><p>Thank you for being eco-friendly! 🌿</p></div></div>`;
+  return `<section class="col" id="section-point"><div class="hd"><i>2</i><div><b>COLLECTION POINT</b><span>Fast and easy returns. Happy customers.</span></div></div>
+<div class="g3" style="margin-bottom:8px">${ph1}${ph2}${ph3}</div>
+<div class="g2"><div class="card"><h4>Container fill level</h4><div class="ring" style="--p:${S.fill}"><div>${S.fill}%</div></div><div style="text-align:center;margin-top:5px;color:var(--m)">Next pickup <span class="tg">in 2 days</span></div><button class="btn" ${S.fill<50?"disabled":""} onclick="rq()">Request pickup</button></div>
+<div class="card"><h4>Daily transactions</h4><div class="row"><span>Holders received</span><b>${S.tin}</b></div><div class="row"><span>Holders returned</span><b>${S.tout}</b></div><div class="row"><span>Coins rewarded</span><b>${S.cd}</b></div><button class="btn o" onclick="T('History: ${S.tin} received, ${S.tout} returned today')">View full history →</button></div></div>
+<div class="hero" style="margin-top:8px"><div class="bx">EFES</div><b>Return.<br>Get rewards.<br>Help the planet.</b></div></section>`;
+}
+
+function sc(){
+  S.hid = document.getElementById("hid").value.replace("#", "").trim() || ("EH-" + (458700 + Math.floor(Math.random() * 90)));
+  S.step = 1;
+  acc();
+  setTimeout(() => {
+    setRole('user');
+    T('QR сканирован: вошли как User (Consumer)');
+  }, 400);
+}
+
+function acc(){ S.step = 2; S.tin++; S.tout++; S.cd += 50; S.coins += 50; S.hold++; S.fill = Math.min(100, S.fill + 5); S.rec.unshift(["Return holder", new Date().toLocaleDateString("ru"), 50]); S.bars = [...S.bars.slice(1), Math.min(100, S.bars[6] + 1)]; }
+function rq(){ S.pick.unshift(["New collection point", new Date().toLocaleTimeString("en", {hour: "2-digit", minute: "2-digit", hour12: false}), 0]); S.fill = 20; S.reqs++; T("Pickup requested"); R(); }
+
+function dist(){
+  return `<section class="col" id="section-dist"><div class="hd"><i>3</i><div><b>DISTRIBUTOR</b><span>Track assets. Plan routes. Meet obligations.</span></div></div>
+<div class="card"><h4>Assigned assets</h4><div class="g3"><div class="kp">${hh}<div><small>Holders</small><b>${f(18000 + S.tout - 46)}</b></div></div><div class="kp">${hh}<div><small>Pallets</small><b>12 000</b></div></div><div class="kp">${hh}<div><small>Kegs</small><b>3 500</b></div></div></div></div>
+<div class="g2"><div><div class="card"><h4>Digital transfer act</h4><div style="font-weight:700">Act #34872</div><div style="color:var(--m);font-size:10.5px">From: EFES → Distributor<br>12.08.2025 14:20</div><div style="margin:6px 0"><span class="tg">${S.signed ? "✓ Signed" : "Unsigned"}</span></div><button class="btn o" onclick="S.signed=1;T('Act #34872 PDF downloaded')">Download PDF</button></div></div>
+<div class="card"><h4>Pickup list <span class="tg" style="float:right">${S.pick.filter(p => !p[2]).length}</span></h4>${S.pick.slice(0, 5).map((p, i) => `<div class="row"><span>${p[0]}</span>${p[2]?'<span class="tg">Done</span>':`<button class="tg r" style="border:0;cursor:pointer" onclick="pk(${i})">${p[1]} · Go</button>`}</div>`).join("")}</div></div>
+<div class="g2"><div class="card"><h4>Scan collection batch</h4>${qr("BATCH" + S.batch, 4)}<button class="btn" onclick="S.batch++;S.inv[0]+=10;T('Batch #'+S.batch+' scanned: +10 holders');R()">Scan batch</button></div>
+<div class="card"><h4>Warehouse handover</h4><div style="color:var(--m);font-size:10.5px">Plant: Almaty<br>Received: 12 450 Holders | 320 pallets | 120 kegs</div><div style="margin:5px 0"><span class="tg">${S.wh ? "✓ Confirmed" : "Pending"}</span></div><button class="btn o" onclick="S.wh=1;T('Warehouse handover confirmed');R()">View warehouse →</button></div></div>
+${S.over ? `<div class="al">⚠ Overdue collection point in Shymkent<br><span style="font-weight:400">Supermarket №12, 3 days</span> <button class="tg" style="border:0;cursor:pointer;float:right" onclick="S.over=0;T('Collection point resolved');R()">View all →</button></div>` : '<div class="card" style="color:var(--g);font-weight:600">No overdue collection points ✓</div>'}</section>`;
+}
+function pk(i){ S.pick[i][2] = 1; S.insp = Math.max(0, S.insp - 1); T("Picked up: " + S.pick[i][0]); R(); }
+
+const RW = [["EFES Hoodie", 500, "👕"], ["Discount 20%", 900, "%"], ["Eco bottle", 200, "🍶"]];
+function user(){
+  const ly = ["1st use", "2nd use", "3rd use"];
+  const ch = ["all", "Holder", "Keg", "Pallet", "Point"];
+  const sel = MP[S.sel];
+  return `<section class="col" id="section-user"><div class="hd"><i>4</i><div><b>CONSUMER</b><span>Scan. Earn. Return. Make an impact.</span></div></div>
+<div class="g2" style="margin-bottom:8px"><div class="ph"><div style="background:linear-gradient(#0b2a47,#163b5e);color:#fff"><div class="t" style="color:#fff">EFES</div><p style="color:#fff;font-size:11px">Scan the QR code on your holder</p><div style="background:#fff;border-radius:8px;padding:6px;display:inline-block;margin:6px">${qr("EH-458732", 4)}</div><p style="color:#dff;text-align:left;font-size:10px">✓ Product info<br>✓ Track your returns<br>✓ Get rewards<br>✓ Support a greener future</p></div></div>
+<div class="card"><h4>Holder lifecycle</h4><div class="ring big" style="--p:${Math.min(100, S.reuse * 33)}"><div>${S.reuse}<small>reuses</small></div></div><div style="text-align:center;color:var(--m);margin:4px 0">Holder ID EH-458732</div>${ly.map((l, i) => `<div class="row"><span class="l"><span class="dot" style="opacity:${i<S.reuse?1:.25}"></span>${l}</span><span style="color:var(--m)">${["12.03.2025", "20.05.2025", "28.07.2025"][i]}</span></div>`).join("")}</div></div>
+
+<div class="g2"><div><div class="card"><h4>Your coins</h4><div style="display:flex;gap:8px;align-items:center"><span style="font-size:24px">🪙</span><div><b style="font-size:20px">${f(S.coins)}</b><div style="color:var(--m)">coins</div></div></div><button class="btn" onclick="document.getElementById('rew').scrollIntoView({behavior:'smooth'})">Redeem rewards</button></div>
+<div class="card"><h4>Recent activity</h4>${S.rec.slice(0, 4).map(r => `<div class="row"><span>${r[0]}<br><span style="color:var(--m);font-size:10px">${r[1]}</span></span><b style="color:${r[2]<0?"var(--bad)":"var(--g)"}">${r[2]>0?"+":""}${r[2]}</b></div>`).join("")}</div></div>
+
+<div class="card">
+  <h4>Kazakhstan Return Points Map</h4>
+  <div class="chips">${ch.map(c => `<button class="tg" style="${S.flt==c?"":"opacity:.5"}" onclick="S.flt='${c}';S.sel=-1;R()">${c=="all"?"All":c+"s"}</button>`).join("")}</div>
+  ${map(10)}
+  <div style="margin-top:6px">${sel ? `<b>${sel[3]}</b> ·${sel[2]} <button class="tg" style="border:0;cursor:pointer;float:right" onclick="T('Route to ${sel[3]} built')">Route →</button>` : '<span style="color:var(--m)">Tap a hub on the Kazakhstan map</span>'}</div>
+</div></div>
+
+<div class="g2" style="margin-top:8px"><div class="card" id="rew"><h4>Rewards catalog</h4>${RW.map((r, i) => `<div class="row"><span class="l"><span style="font-size:16px">${r[2]}</span>${r[0]}<br></span><button class="tg ${S.coins<r[1]?"r":""}" style="border:0;cursor:pointer" onclick="rd(${i})">${r[1]} coins</button></div>`).join("")}</div>
+<div><div class="card" style="text-align:center"><div style="width:36px;height:36px;border-radius:50%;background:var(--nv);color:#fff;font-size:20px;line-height:36px;margin:0 auto 4px">✓</div><b>${S.conf ? "Thank you!" : "Return confirmed"}</b><div style="color:var(--m);font-size:10.5px">Your holder has been successfully returned.</div><button class="btn" onclick="S.conf=1;T('Profile: Aliyum K. · '+f(S.coins)+' coins');R()">View your profile</button></div>
+<div class="card"><h4>Profile & history</h4><div class="row"><span class="l"><span class="pf">AK</span>Aliyum K.</span></div><div class="row"><span>My profile</span><span>›</span></div><div class="row"><span>Rewards</span><span>›</span></div><div class="row"><span>Settings</span><span>›</span></div></div></div></div>
+<div class="card" style="margin-top:8px"><h4>World impact</h4><div class="g3"><div class="kp"><div><b>${(27.3 + (S.tout - 46) * .01).toFixed(1)}Mt kg</b><small>CO₂ saved</small></div></div><div class="kp"><div><b>9.5M l</b><small>Water saved</small></div></div><div class="kp"><div><b>12.8M kg</b><small>Plastic reduced</small></div></div></div></div></section>`;
+}
+
+function rd(i){
+  const r = RW[i];
+  if(S.coins < r[1]){ T("Not enough coins: need " + (r[1] - S.coins) + " more"); return; }
+  S.coins -= r[1];
+  S.rec.unshift(["Reward: " + r[0], new Date().toLocaleDateString("ru"), -r[1]]);
+  T("Redeemed: " + r[0]);
+  R();
+}
+
+function R(){
+  const w = document.getElementById("app");
+  w.innerHTML = {admin, point, dist, user}[currentRole]();
+}
+
+parseHash();
+if(!window.location.hash) {
+  updateHash();
+}
+R();
+</script></body></html>
